@@ -6,7 +6,8 @@ WORKDIR /app
 
 # Install CURL (for health-checks)
 RUN apt-get update && apt-get install -y \
-    curl
+    curl \
+    wget
 
 # Copy package.json and bun.lockb files
 COPY package.json bun.lock ./
