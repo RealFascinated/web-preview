@@ -73,4 +73,4 @@ RUN bun run install-chrome
 EXPOSE 3000
 
 # Command to run the application
-CMD ["bun", "run", "start", "--no-sandbox"]
+CMD ["bun", "run", "start"]

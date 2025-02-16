@@ -21,7 +21,9 @@ async function getBrowser() {
   if (!browser) {
     const before = performance.now();
     console.log("Launching browser instance");
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     console.log(`Browser instance launched in ${formatDuration(performance.now() - before)}`);
     startIdleTimer(); // Start the idle timer when the browser is launched
   }
