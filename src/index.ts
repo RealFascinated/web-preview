@@ -2,6 +2,7 @@ import Elysia, { t } from "elysia";
 import { Controller, decorators, Get } from "elysia-decorators";
 import { getScreenshot } from "./common/preview";
 import { handleError } from "./common/utils";
+import { BadRequestError } from "./common/error";
 
 const app = new Elysia();
 
@@ -29,6 +30,10 @@ class AppController {
   }: {
     query: { url: string; width?: number; height?: number; idletime?: number };
   }) {
+    if (!url || !url.startsWith("http")) {
+      throw new BadRequestError("Invalid or missing URL, example: ?url=https://example.com");
+    }
+
     return new Response(await getScreenshot(url, width, height, idletime), {
       headers: {
         "Content-Type": "image/png",
