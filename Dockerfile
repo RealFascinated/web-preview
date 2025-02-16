@@ -43,6 +43,9 @@ RUN apt-get update && apt-get install -y \
     libxtst6 \
     lsb-release
 
+# Create a non-root user and set permissions
+RUN useradd -m appuser
+
 # Copy package.json and bun.lockb files
 COPY package.json bun.lock ./
 
@@ -54,6 +57,12 @@ COPY . .
 
 # Build the application
 RUN bun run build
+
+# Change ownership of the app directory
+RUN chown -R appuser:appuser /app
+
+# Switch to the non-root user
+USER appuser
 
 # Expose the port the app runs on
 EXPOSE 3000
