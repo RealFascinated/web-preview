@@ -12,8 +12,14 @@ const DEFAULTS = {
   idletime: 500,
 };
 
-@Controller("/")
+@Controller()
 class AppController {
+  @Get("/health")
+  health() {
+    console.log("Health check endpoint hit");
+    return "OK";
+  }
+
   @Get("/", {
     config: {
       // @ts-ignore
@@ -41,18 +47,10 @@ class AppController {
       },
     });
   }
-
-  @Get("/health")
-  async health() {
-    return new Response("OK", {
-      headers: {
-        "Content-Type": "text/plain",
-      },
-    });
-  }
 }
 
 handleError(app);
+
 app.use(
   decorators({
     controllers: [AppController],
