@@ -1,8 +1,12 @@
 # Use the official Bun image as the base image
-FROM oven/bun:1.2.2
+FROM oven/bun:1.2.2-debian
 
 # Set the working directory
 WORKDIR /app
+
+# Install CURL (for health-checks)
+RUN apt-get update && apt-get install -y \
+    curl
 
 # Copy package.json and bun.lockb files
 COPY package.json bun.lock ./
