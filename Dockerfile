@@ -41,7 +41,9 @@ RUN apt-get update && apt-get install -y \
     libxrender1 \
     libxss1 \
     libxtst6 \
-    lsb-release
+    lsb-release \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user and set permissions
 RUN useradd -m appuser
@@ -71,4 +73,4 @@ RUN bun run install-chrome
 EXPOSE 3000
 
 # Command to run the application
-CMD ["bun", "run", "start"]
+CMD ["bun", "run", "start", "--no-sandbox"]
