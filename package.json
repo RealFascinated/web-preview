@@ -1,0 +1,20 @@
+{
+  "name": "web-preview",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch run src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "elysia": "^1.2.12",
+    "elysia-decorators": "^1.0.2",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "puppeteer": "^24.2.1"
+  }
+}
