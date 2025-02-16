@@ -16,7 +16,6 @@ const DEFAULTS = {
 class AppController {
   @Get("/health")
   health() {
-    console.log("Health check endpoint hit");
     return "OK";
   }
 
