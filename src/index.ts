@@ -36,6 +36,15 @@ class AppController {
       },
     });
   }
+
+  @Get("/health")
+  async health() {
+    return new Response("OK", {
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
+  }
 }
 
 handleError(app);
