@@ -58,14 +58,14 @@ COPY . .
 # Build the application
 RUN bun run build
 
-# Install Chrome
-RUN bun run install-chrome
-
 # Change ownership of the app directory
 RUN chown -R appuser:appuser /app
 
 # Switch to the non-root user
 USER appuser
+
+# Install Chrome
+RUN bun run install-chrome
 
 # Expose the port the app runs on
 EXPOSE 3000
