@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "bun --watch run src/index.ts",
     "build": "bun build src/index.ts --outfile dist/index.js --target bun --minify",
-    "start": "bun run dist/index.js"
+    "start": "bun run dist/index.js",
+    "install-chrome": "bunx puppeteer browsers install chrome"
   },
   "devDependencies": {
     "@types/bun": "latest"

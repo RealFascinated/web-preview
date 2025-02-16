@@ -58,6 +58,9 @@ COPY . .
 # Build the application
 RUN bun run build
 
+# Install Chrome
+RUN bun run install-chrome
+
 # Change ownership of the app directory
 RUN chown -R appuser:appuser /app
 
