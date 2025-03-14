@@ -23,6 +23,7 @@ async function getBrowser() {
     console.log("Launching browser instance");
     browser = await puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      timeout: 30000, // 30 seconds timeout for browser launch
     });
     console.log(`Browser instance launched in ${formatDuration(performance.now() - before)}`);
     startIdleTimer(); // Start the idle timer when the browser is launched
@@ -68,38 +69,36 @@ async function getPage() {
  * @param idleTime - The idle time to wait for the network to be idle
  * @returns The screenshot
  */
-export async function getScreenshot(
-  url: string,
-  width?: number,
-  height?: number,
-  idleTime?: number
-) {
-  startIdleTimer(); // Reset the idle timer on each request
-
-  console.log(`Generating screenshot for ${url} (width: ${width}, height: ${height}, idleTime: ${idleTime})`);
-  const before = performance.now();
-  const page = await getPage();
+export async function getScreenshot(url: string, width: number, height: number, idleTime: number) {
+  console.log(
+    `Generating screenshot for ${url} (width: ${width}, height: ${height}, idleTime: ${idleTime})`
+  );
 
   try {
-    // Set the viewport size if width and height are provided
-    if (width && height) {
-      await page.setViewport({ width, height, deviceScaleFactor: 1 });
-    }
+    const page = await getPage();
+    await page.setViewport({ width, height });
 
-    // Go to the URL with a timeout
-    await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 }); // 30 seconds timeout
+    // Set navigation timeout
+    await page.setDefaultNavigationTimeout(30000);
+    await page.setDefaultTimeout(30000);
 
-    // Wait for network to be idle before taking the screenshot
-    await page.waitForNetworkIdle({ idleTime: idleTime });
+    await page.goto(url, {
+      waitUntil: "networkidle0",
+      timeout: 30000,
+    });
 
-    // Take the screenshot
-    const screenshot = await page.screenshot({ optimizeForSpeed: true, type: "jpeg", quality: 90 });
-    console.log(`Generated screenshot in ${formatDuration(performance.now() - before)} for ${url}`);
+    // Use setTimeout instead of waitForTimeout
+    await new Promise(resolve => setTimeout(resolve, idleTime));
+
+    const screenshot = await page.screenshot();
+    await page.close(); // Close just the page, not the browser
+
+    // Reset the idle timer since we just used the browser
+    startIdleTimer();
+
     return screenshot;
   } catch (error) {
     console.error(`Error generating screenshot for ${url}:`, error);
-    throw error; // Rethrow the error after logging
-  } finally {
-    await page.close(); // Ensure the page is closed
+    throw error;
   }
 }
